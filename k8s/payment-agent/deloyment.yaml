@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-agent
+  namespace: multi-agent
+  labels:
+    app: payment-agent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payment-agent
+  template:
+    metadata:
+      labels:
+        app: payment-agent
+    spec:
+      containers:
+      - name: payment-agent
+        image: multi-agent/payment-agent:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PAYMENT_GATEWAY_URL
+          value: "https://api.stripe.com/v1"
+        - name: PAYMENT_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: payment-secrets
+              key: api-key
+              optional: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5

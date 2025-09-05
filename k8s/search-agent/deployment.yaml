@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-agent
+  namespace: multi-agent
+  labels:
+    app: search-agent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: search-agent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: search-agent
+  template:
+    metadata:
+      labels:
+        app: search-agent
+    spec:
+      containers:
+      - name: search-agent
+        image: multi-agent/search-agent:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ELASTICSEARCH_URL
+          value: "http://elasticsearch-service:9200"
+        - name: SEARCH_INDEX
+          value: "products"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5

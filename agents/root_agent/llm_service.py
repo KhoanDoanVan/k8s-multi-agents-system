@@ -17,7 +17,7 @@ class LLMService:
   
   def __init__(self):
     # In production, use proper secret management
-    self.gemini_api_key = os.getenv("GEMINI_API_KEY")
+    self.gemini_api_key = os.getenv("GOOGLE_API_KEY")
     
 
 

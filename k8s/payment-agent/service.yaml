@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-agent-service
+  namespace: multi-agent
+  labels:
+    app: payment-agent
+spec:
+  selector:
+    app: payment-agent
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+  type: ClusterIP

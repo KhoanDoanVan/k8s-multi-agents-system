@@ -1,0 +1,6 @@
+
+# ENV KEYS API
+*.env
+
+# ENV PYTHON
+/venv
